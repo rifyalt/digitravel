@@ -42,7 +42,8 @@ def login_page():
             st.session_state.logged_in = True
             st.session_state.username = username
             st.success(f"✅ Selamat datang, {username}!")
-            st.experimental_rerun()
+            #st.experimental_rerun()
+            st.rerun()
         else:
             st.error("❌ Username atau password salah.")
 
@@ -595,3 +596,4 @@ st.markdown("""
     © 2025 - Versi 1.0 | Hubungi +62 878 8103 3781 jika ada kendala teknis
 </div>
 """, unsafe_allow_html=True)
+
