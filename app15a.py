@@ -42,8 +42,7 @@ def login_page():
             st.session_state.logged_in = True
             st.session_state.username = username
             st.success(f"✅ Selamat datang, {username}!")
-            #st.experimental_rerun()
-            st.rerun()
+            st.experimental_rerun()
         else:
             st.error("❌ Username atau password salah.")
 
@@ -240,7 +239,7 @@ if data_utama_files:
                         f"📄 Jumlah data: {len(join_result)}"
                     )
         else:
-            st.sidebar.warning("Kolom 'Check in Date' dan/atau 'Check out Date' tidak ditemukan.")
+            st.sidebar.warning("Kolom 'Check in Date' dan/atau 'Check-Out Date' tidak ditemukan.")
 
         # Company Code filter
         if 'Company Code' in join_result.columns:
@@ -280,12 +279,18 @@ if data_utama_files:
 
         # ===== PREVIEW DATA INTERAKTIF =====
         st.markdown("## 👀 Preview Data")
-        gb = GridOptionsBuilder.from_dataframe(join_result)
+
+        # Drop kolom hanya untuk preview
+        drop_cols = ["Site (PSA)", "Site group Name", "Currency", "Reschedule ID", "Source_File"]
+        preview_df = join_result.drop(columns=[c for c in drop_cols if c in join_result.columns])
+
+        gb = GridOptionsBuilder.from_dataframe(preview_df)
         gb.configure_pagination(paginationAutoPageSize=False, paginationPageSize=20)
         gb.configure_default_column(filterable=True, sortable=True, resizable=True)
         gridOptions = gb.build()
+
         AgGrid(
-            join_result,
+            preview_df,
             gridOptions=gridOptions,
             data_return_mode=DataReturnMode.FILTERED_AND_SORTED,
             update_mode=GridUpdateMode.SELECTION_CHANGED,
@@ -596,4 +601,3 @@ st.markdown("""
     © 2025 - Versi 1.0 | Hubungi +62 878 8103 3781 jika ada kendala teknis
 </div>
 """, unsafe_allow_html=True)
-
